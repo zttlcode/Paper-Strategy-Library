@@ -1,13 +1,13 @@
 import pandas as pd
-import os
-
 import numpy as np
 import baostock as bs
+import warnings
 import Data.Asset as PSLAsset
 import Data.HistoryData as PSLHistoryData
-import Tools as PSLTools
 
 import Strategy.Fuzzy as Strategy_Fuzzy
+
+warnings.filterwarnings("ignore", category=FutureWarning, module="pandas")
 
 
 def run_daily(asset, df):
@@ -17,9 +17,10 @@ def run_daily(asset, df):
     live_df.index = pd.to_datetime(live_df.index)
     live_df = df[-250:].reset_index(drop=True)
     # 提取最新价格、时间、成交量
-    asset.tick_close = live_df.at[-1, 'close']
-    asset.tick_time = live_df.at[-1, 'time']
-    asset.tick_volume = live_df.at[-1, 'volume']
+    asset.tick_close = live_df.iloc[-1]['close']
+    asset.tick_time = live_df.iloc[-1]['time']
+    asset.tick_volume = live_df.iloc[-1]['volume']
+
     # 运行策略
     if asset.strategy_name == 'fuzzy':
         Strategy_Fuzzy.strategy_fuzzy(asset, live_df)

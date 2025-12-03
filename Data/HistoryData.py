@@ -7,14 +7,14 @@ def getData_BaoStock_live(asset, start_date, end_date, timeLevel):
     code = None
     # 股票：6开头sh，0或3开头sz
     # 指数：3开头是sz
-    if asset.assetCode.startswith('6'):
-        code = 'sh.' + asset.assetCode
-    elif asset.assetCode.startswith('0') or asset.assetCode.startswith('3'):
-        code = 'sz.' + asset.assetCode
+    if asset.assetsCode.startswith('6'):
+        code = 'sh.' + asset.assetsCode
+    elif asset.assetsCode.startswith('0') or asset.assetsCode.startswith('3'):
+        code = 'sz.' + asset.assetsCode
         if asset.assetsType == 'index':
             # 如果只根据名字判断，0,3以外全是sh，那指数0开头的代码只能加sh.前缀，才满足else，但文件名多了个sh.不好看，所以加这个assetsType
             # 当然影响不只是csv文件名，如果用mysql存，存表名是000001是股票，还是指数，还得区分，因此这个变量得加
-            code = 'sh.' + asset.assetCode
+            code = 'sh.' + asset.assetsCode
     if timeLevel == 'd':
         # 日线数据，股票和指数接口一样
         rs = bs.query_history_k_data_plus(code,
